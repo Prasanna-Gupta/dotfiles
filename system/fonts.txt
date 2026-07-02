@@ -1,0 +1,2 @@
+NotoSans-Regular.ttf: "Noto Sans" "Regular"
+NotoSansMono-Regular.ttf: "Noto Sans Mono" "Regular"

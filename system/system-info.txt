@@ -1,0 +1,12 @@
+Kernel:
+7.0.14-arch1-1
+
+Plasma:
+plasmashell 6.7.1
+
+Qt:
+QMake version 3.1
+Using Qt version 6.11.1 in /usr/lib
+
+GPU:
+NVIDIA GeForce RTX 4050 Laptop GPU, 610.43.02
