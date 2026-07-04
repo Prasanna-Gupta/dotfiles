@@ -1,0 +1,4 @@
+# Prasanna OS sudoers rules
+# USER placeholder replaced by install.sh
+asur ALL=(root) NOPASSWD: /usr/bin/cp /home/asur/.config/prasanna/wallpaper/current.jpg /usr/share/sddm/themes/silent/backgrounds/current.jpg
+asur ALL=(root) NOPASSWD: /usr/bin/cp /home/asur/.config/matugen/sddm-colors.conf /etc/sddm-prasanna/prasanna.conf

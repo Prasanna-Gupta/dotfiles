@@ -1,36 +1,26 @@
 # Evergreen
 
-A personalized KDE Plasma desktop configuration for Arch Linux / EndeavourOS.
-
-## System
-
-- Distribution: EndeavourOS
-- Desktop: KDE Plasma 6
-- Display Server: X11
-- GPU: NVIDIA RTX 4050 Laptop
-- Qt Style: Kvantum (LayanDark)
-- Color Engine: kde-material-you-colors
-- GTK Theme: Decay Green
-- Icon Theme: Tela Circle Green
-- Cursor Theme: Bibata Modern Ice
+A fully reproducible KDE Plasma desktop for EndeavourOS.
 
 ## Features
 
-- Material You wallpaper based colors
-- Dynamic KDE color generation
-- Kvantum themed Qt applications
-- Transparent Konsole
-- GTK and Qt consistency
-- Reproducible desktop setup
+- Material You dynamic colors
+- Kvantum
+- KDE Plasma 6
+- NVIDIA
+- Konsole transparency
+- GTK integration
+- Dynamic wallpapers
+- Automated backup & restore
 
-## Repository Structure
+## Preview
 
-- config/
-- docs/
-- wallpapers/
-- screenshots/
-- scripts/
+(screenshots go here)
 
 ## Installation
 
-Coming soon.
+See docs/installation.md
+
+## Repository
+
+...

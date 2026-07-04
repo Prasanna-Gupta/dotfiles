@@ -1,0 +1,205 @@
+[General]
+scale = 1.0
+enable-animations = true
+background-fill-mode = "fill"
+
+[LockScreen]
+display = true
+background = "current.jpg"
+blur = 5
+brightness = -0.10
+saturation = -0.15
+
+[LockScreen.Clock]
+display = true
+position = "top-center"
+align = "center"
+format = "hh:mm"
+font-family = "Inter"
+font-size = 96
+font-weight = 800
+color = "#FFFFFF"
+
+[LockScreen.Date]
+display = true
+format = "dddd, MMMM d, yyyy"
+locale = "en_US"
+font-family = "Inter"
+font-size = 16
+font-weight = 400
+color = "#CCFFFFFF"
+margin-top = -6
+
+[LockScreen.Message]
+display = true
+position = "bottom-center"
+align = "center"
+text = "Press any key to unlock"
+font-family = "Inter"
+font-size = 13
+font-weight = 400
+display-icon = false
+color = "#99FFFFFF"
+spacing = 6
+
+[LoginScreen]
+background = "current.jpg"
+blur = 40
+brightness = -0.10
+saturation = -0.15
+
+[LoginScreen.LoginArea]
+position = "center"
+margin = 400
+
+[LoginScreen.LoginArea.Avatar]
+shape = "circle"
+active-size = 96
+inactive-size = 96
+inactive-opacity = 0.35
+active-border-size = 1
+active-border-color = "{{colors.primary.dark.hex}}"
+always-active = true
+
+[LoginScreen.LoginArea.Username]
+font-family = "Inter"
+font-size = 17
+font-weight = 500
+color = "#FFFFFF"
+margin = 12
+
+[LoginScreen.LoginArea.PasswordInput]
+width = 240
+height = 44
+display-icon = true
+font-family = "Inter"
+font-size = 13
+icon = "password.svg"
+icon-size = 15
+content-color = "#FFFFFF"
+background-color = "{{colors.primary_container.dark.hex}}"
+background-opacity = 0.25
+border-size = 1
+border-color = "{{colors.primary.dark.hex}}"
+border-radius-left = 22
+border-radius-right = 0
+margin-top = 14
+masked-character = "●"
+
+[LoginScreen.LoginArea.LoginButton]
+background-color = "{{colors.primary.dark.hex}}"
+background-opacity = 0.85
+active-background-color = "{{colors.primary.dark.hex}}"
+active-background-opacity = 1.0
+icon = "arrow-right.svg"
+icon-size = 18
+content-color = "{{colors.on_primary.dark.hex}}"
+active-content-color = "{{colors.on_primary.dark.hex}}"
+border-size = 0
+border-radius-left = 0
+border-radius-right = 22
+margin-left = 0
+show-text-if-no-password = true
+hide-if-not-needed = false
+font-family = "Inter"
+font-size = 12
+font-weight = 500
+
+[LoginScreen.LoginArea.WarningMessage]
+font-family = "Inter"
+font-size = 12
+font-weight = 400
+normal-color = "#CCFFFFFF"
+warning-color = "#FFE57F"
+error-color = "#FF6B6B"
+margin-top = 10
+
+[LoginScreen.MenuArea.Buttons]
+margin-top = 24
+margin-right = 28
+margin-bottom = 24
+margin-left = 28
+size = 28
+border-radius = 8
+spacing = 6
+font-family = "Inter"
+
+[LoginScreen.MenuArea.Popups]
+max-height = 260
+item-height = 32
+item-spacing = 2
+padding = 6
+display-scrollbar = false
+margin = 6
+background-color = "{{colors.surface_container.dark.hex}}"
+background-opacity = 0.90
+active-option-background-color = "{{colors.primary.dark.hex}}"
+active-option-background-opacity = 0.30
+content-color = "{{colors.on_surface.dark.hex}}"
+active-content-color = "#FFFFFF"
+font-family = "Inter"
+border-size = 1
+border-color = "{{colors.outline_variant.dark.hex}}"
+font-size = 12
+icon-size = 16
+
+[LoginScreen.MenuArea.Session]
+display = true
+position = "bottom-left"
+index = 0
+popup-direction = "up"
+popup-align = "start"
+display-session-name = true
+button-width = -1
+popup-width = 180
+background-opacity = 0.0
+active-background-opacity = 0.15
+content-color = "#CCFFFFFF"
+active-content-color = "#FFFFFF"
+border-size = 0
+font-size = 12
+icon-size = 16
+
+[LoginScreen.MenuArea.Layout]
+display = true
+position = "bottom-right"
+index = 1
+popup-direction = "up"
+popup-align = "end"
+popup-width = 160
+display-layout-name = true
+background-opacity = 0.0
+active-background-opacity = 0.15
+content-color = "#CCFFFFFF"
+active-content-color = "#FFFFFF"
+border-size = 0
+font-size = 12
+icon = "language.svg"
+icon-size = 16
+
+[LoginScreen.MenuArea.Keyboard]
+display = false
+
+[LoginScreen.MenuArea.Power]
+display = true
+position = "bottom-right"
+index = 3
+popup-direction = "up"
+popup-align = "end"
+popup-width = 120
+background-opacity = 0.0
+active-background-opacity = 0.15
+content-color = "#CCFFFFFF"
+active-content-color = "#FFFFFF"
+border-size = 0
+icon = "power.svg"
+icon-size = 16
+
+[Tooltips]
+enable = true
+font-family = "Inter"
+font-size = 11
+content-color = "#FFFFFF"
+background-color = "{{colors.surface_container_high.dark.hex}}"
+background-opacity = 0.90
+border-radius = 6

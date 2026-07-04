@@ -1,0 +1,8 @@
+[Unit]
+Description=Prasanna OS Theme Synchronizer
+
+[Service]
+Type=oneshot
+# Debounce: kde-material-you-colors writes the file multiple times in quick succession
+ExecStartPre=/bin/sleep 2
+ExecStart=%h/.config/prasanna/update.sh

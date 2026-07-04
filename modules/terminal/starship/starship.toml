@@ -1,0 +1,39 @@
+format = """
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$nodejs\
+$python\
+$java\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character
+"""
+
+add_newline = false
+
+[directory]
+style = "bold #a7cda8"
+truncation_length = 3
+truncate_to_repo = false
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold green"
+
+[fill]
+symbol = " "
+
+[cmd_duration]
+min_time = 1000
+format = "[$duration](dimmed white)"
+
+[character]
+success_symbol = "[❯](bold #a7cda8)"
+error_symbol = "[❯](bold red)"

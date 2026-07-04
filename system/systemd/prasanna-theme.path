@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch for Material You color changes
+
+[Path]
+PathModified=%h/.local/share/color-schemes/MaterialYouDark.colors
+
+[Install]
+WantedBy=default.target

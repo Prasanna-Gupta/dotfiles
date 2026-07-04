@@ -1,0 +1,28 @@
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
+
+[alias]
+    st = status
+    co = checkout
+    sw = switch
+    br = branch
+    ci = commit
+    cm = commit -m
+    lg = log --graph --decorate --all --oneline
+    last = log -1 HEAD
+    unstage = restore --staged .
+	tree = log --graph --all --decorate --oneline --color
+[user]
+	name = Prasanna Gupta
+	email = guptaprasanna171@gmail.com
+[init]
+	defaultBranch = main
+[core]
+	editor = nano
+	pager = delta
+[color]
+	ui = auto
+[fetch]
+	prune = true
+[pull]
+	rebase = false
