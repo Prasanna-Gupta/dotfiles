@@ -260,3 +260,23 @@ echo "║     Log out and back in to apply      ║"
 echo "║     all KDE and SDDM changes.         ║"
 echo "╚═══════════════════════════════════════╝"
 echo ""
+
+setup_look_and_feel() {
+    info "Setting up Prasanna look-and-feel..."
+    mkdir -p "$HOME/.local/share/plasma/look-and-feel/"
+    symlink "$DOTFILES/modules/kde/look-and-feel/com.prasanna.desktop" \
+        "$HOME/.local/share/plasma/look-and-feel/com.prasanna.desktop"
+
+    # Apply look-and-feel
+    if ! $DRY_RUN; then
+        plasma-apply-lookandfeel --apply com.prasanna.desktop 2>/dev/null || true
+    fi
+
+    # Generate circular avatar
+    if [ -f "$HOME/.face.icon" ]; then
+        python3 "$DOTFILES/modules/theming/hooks/make_avatar.py" \
+            "$HOME/.face.icon" /tmp/prasanna-avatar-circle.png
+        sudo cp /tmp/prasanna-avatar-circle.png /var/lib/AccountsService/icons/asur
+        sudo chmod 644 /var/lib/AccountsService/icons/asur
+    fi
+}
