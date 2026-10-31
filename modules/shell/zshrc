@@ -1,0 +1,51 @@
+# Prasanna OS — ~/.zshrc (symlinked from the dotfiles repo)
+# Machine-specific stuff (API keys, extra PATHs, work aliases) → ~/.zshrc.local
+
+# ── History ──────────────────────────────────────────────────────────────────
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
+setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS INTERACTIVE_COMMENTS NO_BEEP
+
+# ── Completion ───────────────────────────────────────────────────────────────
+fpath=(/usr/share/zsh/site-functions $fpath)
+autoload -Uz compinit
+# Rebuild the completion cache at most once a day (fast startup)
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then compinit; else compinit -C; fi
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'      # case-insensitive
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%F{8}── %d%f'
+
+# ── Keys ─────────────────────────────────────────────────────────────────────
+bindkey -e
+bindkey '^[[1;5C' forward-word      # Ctrl+→
+bindkey '^[[1;5D' backward-word     # Ctrl+←
+bindkey '^[[H'    beginning-of-line
+bindkey '^[[F'    end-of-line
+bindkey '^[[3~'   delete-char
+
+# ── Tools (each line is skipped if the tool isn't installed) ────────────────
+export EDITOR=nvim VISUAL=nvim PAGER=less MANPAGER="sh -c 'col -bx | bat -l man -p'"
+(( $+commands[nvim] )) || export EDITOR=nano VISUAL=nano
+(( $+commands[bat]  )) || unset MANPAGER
+
+(( $+commands[fzf] ))      && source <(fzf --zsh)           # Ctrl+T files · Alt+C cd
+(( $+commands[zoxide] ))   && eval "$(zoxide init zsh)"     # z <dir>, zi = interactive
+(( $+commands[atuin] ))    && eval "$(atuin init zsh --disable-up-arrow)"  # Ctrl+R
+(( $+commands[starship] )) && eval "$(starship init zsh)"
+
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border rounded --info inline'
+
+# ── Aliases ──────────────────────────────────────────────────────────────────
+[[ -f ~/.config/zsh/aliases.zsh ]] && source ~/.config/zsh/aliases.zsh
+
+# ── Plugins (last: syntax highlighting must be sourced at the very end) ────
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

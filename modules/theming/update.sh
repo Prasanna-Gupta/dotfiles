@@ -1,27 +1,47 @@
-#!/bin/bash
-# Prasanna OS Theme Orchestrator
-# Single entry point for all theme updates
+#!/usr/bin/env bash
+# Prasanna OS — theme orchestrator.
+# Triggered by prasanna-theme.path whenever kde-material-you-colors rewrites
+# MaterialYouDark.colors (i.e. on wallpaper change). Safe to run by hand:
+#   prasanna-theme            # full pipeline
+#   prasanna-theme 05         # just hooks whose name starts with 05
 
-HOOK_DIR="$HOME/.config/prasanna/hooks"
-LOG_DIR="$HOME/.local/share/prasanna/logs"
+set -uo pipefail
+
+ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+export PRASANNA_THEMING="$ROOT"
+export STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/prasanna"
+LOG_DIR="$STATE_DIR/logs"
 LOG="$LOG_DIR/update-$(date +%Y%m%d).log"
-
 mkdir -p "$LOG_DIR"
-echo "=== Theme update started: $(date) ===" >> "$LOG"
 
-for hook in "$HOOK_DIR"/[0-9]*.sh; do
-    HOOK_NAME=$(basename "$hook")
-    echo "[$(date +%H:%M:%S)] Starting $HOOK_NAME" >> "$LOG"
-    
-    if bash "$hook" >> "$LOG" 2>&1; then
-        echo "[$(date +%H:%M:%S)] OK: $HOOK_NAME" >> "$LOG"
+# One run at a time (the colours file is written several times in a burst)
+exec 9>"$STATE_DIR/.lock"
+flock -n 9 || { echo "Another theme update is running — skipping"; exit 0; }
+
+# Keep a week of logs
+find "$LOG_DIR" -name 'update-*.log' -mtime +7 -delete 2>/dev/null
+
+FILTER="${1:-}"
+FAILED=()
+
+echo "=== Theme update $(date '+%F %T') ===" >>"$LOG"
+for hook in "$ROOT"/hooks/[0-9]*.sh; do
+    name="$(basename "$hook")"
+    [[ -n "$FILTER" && "$name" != "$FILTER"* ]] && continue
+    if bash "$hook" >>"$LOG" 2>&1; then
+        echo "[$(date +%T)] ok    $name" >>"$LOG"
     else
-        echo "[$(date +%H:%M:%S)] FAILED: $HOOK_NAME" >> "$LOG"
-        notify-send -u critical "Prasanna OS" \
-            "Theme update failed at $HOOK_NAME\nCheck $LOG"
-        exit 1
+        rc=$?
+        echo "[$(date +%T)] FAIL  $name (exit $rc)" >>"$LOG"
+        FAILED+=("$name")
+        # 01 produces the accent everything else needs — stop if it fails
+        [[ "$name" == 01-* ]] && break
     fi
 done
 
-echo "=== Theme update complete: $(date) ===" >> "$LOG"
-notify-send -i preferences-desktop-theme "Prasanna OS" "Theme synchronized"
+if ((${#FAILED[@]})); then
+    notify-send -u critical -a "Prasanna OS" "Theme sync failed" \
+        "${FAILED[*]}\nLog: ${LOG/#$HOME/\~}" 2>/dev/null
+    exit 1
+fi
+echo "=== done ===" >>"$LOG"

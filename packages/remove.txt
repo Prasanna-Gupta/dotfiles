@@ -1,0 +1,21 @@
+# Leftovers from HyDE/Hyprland and old themes. They do nothing on KDE,
+# and some actively conflict. `./install.sh cleanup` offers to remove
+# whichever of these are installed (interactive — you confirm).
+dunst                              # fights Plasma's own notification server
+rofi
+waybar
+wlogout
+awww
+uwsm
+cliphist
+satty
+nwg-look
+kwin-effects-better-blur-dx-x11-git  # X11-only build; stock Blur is used now
+kvantum
+kvantum-qt5
+plasma6-themes-layan-git
+sweet-kde-theme-git
+tela-circle-icon-theme-green
+colloid-icon-theme-git
+cmatrix
+unifetch

@@ -1,0 +1,34 @@
+# Prasanna OS — core: everything the theming engine + desktop look needs.
+# Installed by: ./install.sh packages   (or ./install.sh all)
+
+# Colour engine
+kde-material-you-colors
+matugen
+python-pillow          # avatar generator
+jq
+inotify-tools
+
+# Look: one stack, every piece follows the Material You colour scheme
+breeze                 # Qt app style + Plasma style (both read the colour scheme)
+breeze-gtk             # GTK apps pick up KDE colours via kde-gtk-config
+kde-gtk-config
+papirus-icon-theme
+papirus-folders        # recolours folder icons to the accent (hook 06)
+bibata-cursor-theme
+inter-font
+ttf-jetbrains-mono-nerd
+noto-fonts-emoji
+
+# Terminal + shell
+kitty
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+zsh-completions
+starship
+
+# Wayland session bits
+plasma-workspace
+qt6-wayland
+xdg-desktop-portal-kde
+wl-clipboard

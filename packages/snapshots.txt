@@ -1,0 +1,5 @@
+# Snapshot safety — needs a btrfs root (EndeavourOS default btrfs layout)
+timeshift
+timeshift-autosnap   # snapshot before every pacman transaction
+grub-btrfs           # snapshots appear in the GRUB menu
+inotify-tools

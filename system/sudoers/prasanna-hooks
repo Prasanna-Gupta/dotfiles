@@ -1,2 +1,0 @@
-asur ALL=(root) NOPASSWD: /usr/bin/cp /tmp/prasanna-avatar-circle.png /var/lib/AccountsService/icons/asur
-asur ALL=(root) NOPASSWD: /usr/bin/chmod 644 /var/lib/AccountsService/icons/asur

@@ -1,0 +1,5 @@
+# ASUS TUF A15 — hardware control (asus-linux.org)
+asusctl              # battery limit, fan profiles, keyboard backlight
+rog-control-center   # GUI + tray for asusctl
+supergfxctl          # GPU mode: Integrated / Hybrid / dGPU (MUX)
+power-profiles-daemon

@@ -1,41 +1,30 @@
-#!/bin/bash
-# Hook 01: Extract accent from kde-material-you-colors output
+#!/usr/bin/env bash
+# 01 — read the accent KDE/Material You just generated → $STATE_DIR/accent.env
+set -euo pipefail
+: "${STATE_DIR:=${XDG_STATE_HOME:-$HOME/.local/state}/prasanna}"
+mkdir -p "$STATE_DIR"
 
-COLORS_FILE="$HOME/.local/share/color-schemes/MaterialYouDark.colors"
-ACCENT_ENV="$HOME/.config/prasanna/colors/accent.env"
+COLORS_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/color-schemes/MaterialYouDark.colors"
+[[ -f "$COLORS_FILE" ]] || { echo "MaterialYouDark.colors not found — is kde-material-you-colors running?"; exit 1; }
 
-if [ ! -f "$COLORS_FILE" ]; then
-    echo "ERROR: MaterialYouDark.colors not found"
-    exit 1
+# Prefer [General] AccentColor, fall back to DecorationFocus
+raw="$(awk -F= '/^\[General\]/{g=1;next} /^\[/{g=0} g&&$1=="AccentColor"{print $2;exit}' "$COLORS_FILE")"
+[[ -z "$raw" ]] && raw="$(grep -m1 '^DecorationFocus=' "$COLORS_FILE" | cut -d= -f2)"
+raw="$(tr -d ' \r\n' <<<"$raw")"
+
+# KDE writes either "#rrggbb" or "r,g,b" — normalise to hex
+if [[ "$raw" =~ ^#?([0-9a-fA-F]{6})$ ]]; then
+    hex="#${BASH_REMATCH[1],,}"
+elif [[ "$raw" =~ ^([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})$ ]]; then
+    hex="$(printf '#%02x%02x%02x' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}")"
+else
+    echo "Could not parse accent: '$raw'"; exit 1
 fi
 
-ACCENT=$(grep "^DecorationFocus=" "$COLORS_FILE" | head -n1 | cut -d'=' -f2 | tr -d '\n\r')
-
-if [ -z "$ACCENT" ]; then
-    echo "ERROR: Could not extract accent color"
-    exit 1
-fi
-
-cat > "$ACCENT_ENV" << ENVEOF
-ACCENT=$ACCENT
-ACCENT_R=$(printf "%d" 0x${ACCENT:1:2})
-ACCENT_G=$(printf "%d" 0x${ACCENT:3:2})
-ACCENT_B=$(printf "%d" 0x${ACCENT:5:2})
-ENVEOF
-
-echo "Accent extracted: $ACCENT"
-
-# Regenerate circular avatar
-FACE="$HOME/.face.icon"
-DEST="/var/lib/AccountsService/icons/asur"
-
-if [ -f "$FACE" ]; then
-    python3 /home/asur/.config/prasanna/hooks/make_avatar.py "$FACE" /tmp/prasanna-avatar-circle.png
-    if [ $? -eq 0 ]; then
-        sudo cp /tmp/prasanna-avatar-circle.png "$DEST"
-        sudo chmod 644 "$DEST"
-        echo "Avatar updated"
-    else
-        echo "Avatar generation failed"
-    fi
-fi
+cat >"$STATE_DIR/accent.env" <<ENV
+ACCENT=$hex
+ACCENT_R=$((16#${hex:1:2}))
+ACCENT_G=$((16#${hex:3:2}))
+ACCENT_B=$((16#${hex:5:2}))
+ENV
+echo "Accent: $hex"

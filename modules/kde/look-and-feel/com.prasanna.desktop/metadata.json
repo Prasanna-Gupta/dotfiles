@@ -4,7 +4,7 @@
         "Description": "Prasanna OS",
         "Id": "com.prasanna.desktop",
         "Name": "Prasanna",
-        "Version": "1.0",
+        "Version": "2.0",
         "Website": "https://github.com/Prasanna-Gupta/dotfiles"
     },
     "KPackageStructure": "Plasma/LookAndFeel"

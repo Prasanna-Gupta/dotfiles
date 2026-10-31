@@ -1,226 +1,109 @@
 <div align="center">
 
 # Prasanna OS
-### A personal Linux workstation experience built on Arch Linux + KDE Plasma 6
+### EndeavourOS + KDE Plasma 6 (Wayland) on an ASUS TUF A15
 
 *Minimal. Automated. Material You.*
 
-![Preview](docs/preview.png)
+<!-- add a screenshot: spectacle -b -n -o docs/preview.png -->
 
 </div>
 
 ---
 
-## Philosophy
+## Idea
 
-This is not a collection of isolated dotfiles.
-It is a coherent operating system experience where every component works together automatically.
+**Change the wallpaper and everything else follows.**
 
-**Change one thing. Everything updates.**
-Wallpaper changes
-↓
-Material You extracts colors
-↓
-Desktop updates
-↓
-Terminal updates
-↓
-Login screen updates
-↓
-Editor accent updates
-↓
-Done. No manual work.
----
-
-## System
-
-| Component | Choice |
-|-----------|--------|
-| OS | Arch Linux |
-| Desktop | KDE Plasma 6 |
-| Display Server | Wayland |
-| Display Manager | SDDM + SilentSDDM |
-| Color Engine | kde-material-you-colors |
-| Terminal | Kitty |
-| Shell | Zsh + Starship |
-| Editor | VS Code + JetBrains |
-| Font | Inter + CaskaydiaCove Nerd Font |
-
----
-
-## Modules
-
-### 🎨 Dynamic Theming Engine
-The core of Prasanna OS. A hook-based automation pipeline that synchronizes colors across every component.
-
-**Pipeline:**
-MaterialYouDark.colors (kde-material-you-colors)
-↓ systemd path watcher
-~/.config/prasanna/update.sh (orchestrator)
-↓
-01-colors.sh   → extract accent from KDE
-02-wallpaper.sh → sync wallpaper to SDDM
-03-sddm.sh     → regenerate SDDM config via matugen
-04-terminal.sh → regenerate kitty theme via matugen
-05-vscode.sh   → inject accent into VS Code settings
-06-starship.sh → update prompt accent color
-Triggers automatically on wallpaper change. Zero manual steps.
-
-### 🔐 Login Experience
-SilentSDDM theme with:
-- Dynamic wallpaper (always matches desktop)
-- Material You accent colors
-- Glassmorphism UI
-- Frosted blur background
-- Inter typography
-- Minimal pill-shaped controls
-- Auto-updates when wallpaper changes
-
-### 💻 Terminal
-Kitty terminal with live Material You theming.
-Colors reload without restarting the terminal (SIGUSR1).
-
-### 🐚 Shell
-Zsh + Starship prompt with Material You accent on directory and git indicators.
-
-### 🖥️ VS Code
-Catppuccin Macchiato base with Material You accent injected on:
-- Status bar
-- Cursor
-- Selections
-- Activity badge
-- Tab indicators
-
-### 🎭 KDE Plasma
-- Klassy window decorations
-- Layan theme
-- Kvantum Qt styling
-- Material You color scheme
-- Colloid + Tela Circle icons
-- Bibata cursor
-
-### 🌿 GTK
-GTK 3 + 4 theming consistent with KDE appearance.
-
----
-
-## Installation
-
-> Designed for Arch Linux + KDE Plasma 6. Single machine or multi-machine.
-
-```bash
-# Clone
-git clone https://github.com/Prasanna-Gupta/dotfiles.git ~/dotfiles
-
-# Review what will happen
-bash ~/dotfiles/install.sh --dry-run
-
-# Install
-bash ~/dotfiles/install.sh
+```
+wallpaper ─▶ kde-material-you-colors ─▶ MaterialYouDark.colors
+                                            │  (systemd path watcher)
+                                            ▼
+                                     prasanna-theme
+   01 colors    read KDE accent
+   02 wallpaper cache it, copy to the login screen
+   03 matugen   ONE run seeded from that accent → kitty · SDDM · colors.json
+   04 vscode    accent → status bar, cursor, selections, buttons
+   05 starship  render prompt from template
+   06 icons     Papirus folder colour → nearest match to the accent
 ```
 
-The installer:
-- Installs all packages from `packages.txt`
-- Creates symlinks from `~/dotfiles/modules/` to `~/.config/`
-- Sets up SDDM config ownership
-- Installs systemd path watcher
-- Configures sudoers for passwordless hook operations
-- Runs initial theme synchronization
+v2 uses **one visual stack where every piece reads the same colour scheme**,
+so any wallpaper looks deliberate everywhere:
 
-Log out and back in after installation to apply all changes.
+| Layer | Choice | Follows Material You? |
+|---|---|---|
+| Qt app style | Breeze | ✓ |
+| Plasma style (panel, popups) | Breeze ("default") | ✓ |
+| GTK apps | Breeze-GTK via kde-gtk-config | ✓ |
+| Window borders | Klassy if installed, else Breeze · borderless · `– □ ×` | ✓ |
+| Icons | Papirus-Dark, folders recoloured to accent | ✓ |
+| Terminal | kitty, blur from KWin, fixed readable ANSI colours | chrome only |
+| Fonts | Inter (UI) · JetBrains Mono Nerd (code) | — |
+| Cursor | Bibata Modern Ice | — |
+| Effects | stock Blur, Scale, hide idle cursor, Night Light | — |
+
+## Utilities
+
+| Module | What you get |
+|---|---|
+| `shell` | zsh + Starship, `fzf` (Ctrl+T / Alt+C), `atuin` (Ctrl+R history search), `zoxide` (`z proj`), eza/bat aliases, `y` (yazi that cd's), `x` (extract anything), weekly package-cache cleanup |
+| `asus` | battery stops at **80%** (`BATTERY_LIMIT=…` to change), power profiles (`quiet` / `balanced` / `perf`), ROG Control Center, GPU mode info |
+| `tiling` | Krohnkite auto-tiling with 8px gaps; dialogs float. Keys → [docs/KEYBINDS.md](docs/KEYBINDS.md) |
+| `snapshots` | Timeshift snapshot before every `yay -Syu` (keeps 5), bootable from GRUB |
+| `wayland` | NVIDIA checks, native-Wayland flags for VS Code / Brave / Electron |
+| `doctor` | one command that tells you what's healthy and what isn't |
+
+## Install
+
+```bash
+git clone https://github.com/Prasanna-Gupta/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install.sh --dry-run all     # preview
+./install.sh all               # do it
+./scripts/doctor.sh            # verify
+```
+
+Then log out and pick **Plasma (Wayland)** at the login screen.
+
+Every module is independent and re-runnable: `./install.sh kde`, `./install.sh asus`, …
+Opt-in extras (not in `all`): `panel` (minimal floating panel), `apps` (your app list), `cleanup` (remove leftovers).
+
+**Coming from v1?** Read [docs/MIGRATION.md](docs/MIGRATION.md) first. One command keeps your desktop intact during the switch.
 
 ### Prerequisites
-```bash
-# Install yay (AUR helper) if not present
-pacman -S --needed git base-devel
-git clone https://aur.archlinux.org/yay.git
-cd yay && makepkg -si
+- `yay`
+- Optional: [SilentSDDM](https://github.com/uiriansan/SilentSDDM) for the synced login screen (everything else works without it)
+- Optional: Krohnkite (System Settings → KWin Scripts → Get New) for tiling
 
-# Install SilentSDDM theme
-# https://github.com/uiriansan/SilentSDDM
+## Layout
+
+```
+install.sh              entry point (modules, --dry-run, --yes)
+lib/common.sh           shared helpers (symlink, kwrite, run)
+packages/               core · utils · asus · snapshots · apps (opt-in) · remove
+modules/
+  theming/              update.sh + hooks/01-06 + templates/ + lib/ (python helpers)
+  kde/                  apply.sh (kwriteconfig6 keys), panel.js, look-and-feel/
+  shell/                zshrc, aliases.zsh, starship.toml.tmpl, gitconfig
+  terminal/kitty/       kitty.conf
+  asus/ tiling/ snapshots/ wayland/ fontconfig/
+system/                 systemd user units, sudoers template
+scripts/                doctor.sh, set-avatar.sh, migrate-v1.sh
+docs/                   MIGRATION, KEYBINDS, troubleshooting, material-you
 ```
 
----
-
-## Repository Structure
-~/dotfiles/
-├── install.sh                    # Entry point — idempotent installer
-├── packages.txt                  # Full package list
-│
-├── modules/
-│   ├── theming/                  # Prasanna OS automation engine
-│   │   ├── hooks/                # 01-06 numbered hooks
-│   │   ├── templates/            # matugen templates
-│   │   └── update.sh             # Orchestrator
-│   ├── terminal/                 # Kitty + Starship
-│   ├── kde/                      # KDE Plasma configs
-│   ├── shell/                    # Git config
-│   └── gtk/                      # GTK 3 + 4 theming
-│
-├── system/
-│   ├── systemd/                  # prasanna-theme path watcher
-│   ├── sudoers/                  # passwordless hook rules
-│   └── sddm/                     # SDDM config template
-│
-├── qt/                           # Qt/Kvantum themes
-├── docs/                         # Documentation
-└── local/                        # Machine-specific (gitignored)
----
-
-## How It Works
-
-### Color Pipeline
-`kde-material-you-colors` runs as a user daemon and writes `~/.local/share/color-schemes/MaterialYouDark.colors` whenever the wallpaper changes. A systemd path unit watches this file and triggers the Prasanna OS orchestrator.
-
-The orchestrator runs hooks in order. Each hook is independent and testable:
-```bash
-bash ~/.config/prasanna/hooks/01-colors.sh  # test individually
-bash ~/.config/prasanna/update.sh           # run full pipeline
-```
-
-Logs at `~/.local/share/prasanna/logs/`.
-
-### SDDM Wallpaper Sync
-SDDM runs as a system user and cannot access home directories. Hook 02 copies the active wallpaper to `/usr/share/sddm/themes/silent/backgrounds/current.jpg` using ACL permissions — no sudo required.
-
-### Generated Files
-matugen templates produce generated output that is **never tracked in git**. Only templates are tracked. Generated files are gitignored.
-
----
-
-## Roadmap
-
-- [x] Dynamic wallpaper sync to SDDM
-- [x] Material You color extraction
-- [x] SDDM theming automation
-- [x] Kitty terminal theming
-- [x] VS Code accent injection
-- [x] Starship prompt theming
-- [x] Symlink-based installer
-- [ ] JetBrains theming
-- [ ] Dunst notification theming
-- [ ] Firefox theming
-- [ ] Waybar theming
-- [ ] Animation polish
-- [ ] Multi-monitor support
-
----
-
-## Troubleshooting
-
-See [docs/troubleshooting.md](docs/troubleshooting.md).
-
----
+**Design rules**
+- KDE files that KDE itself rewrites (`kdeglobals`, `kwinrc`, …) are **not** symlinked. `kde/apply.sh` sets just the keys that matter, so the repo stays clean.
+- Generated files never live in the repo. Runtime state goes to `~/.local/state/prasanna/`.
+- Hooks fail soft: a missing app (no VS Code, no SDDM theme) is skipped, not an error.
+- sudo is only used for exact, listed commands (`/etc/sudoers.d/prasanna-hooks`).
 
 ## Credits
-
-- [SilentSDDM](https://github.com/uiriansan/SilentSDDM) — SDDM theme
-- [kde-material-you-colors](https://github.com/luisbocanegra/kde-material-you-colors) — Material You for KDE
-- [matugen](https://github.com/InioX/matugen) — Material You color generation
-- [Klassy](https://github.com/paulmcauley/klassy) — Window decorations
-
----
-
-<div align="center">
-<sub>Built for personal use. Evolved continuously.</sub>
-</div>
+[kde-material-you-colors](https://github.com/luisbocanegra/kde-material-you-colors) ·
+[matugen](https://github.com/InioX/matugen) ·
+[SilentSDDM](https://github.com/uiriansan/SilentSDDM) ·
+[Klassy](https://github.com/paulmcauley/klassy) ·
+[asus-linux](https://asus-linux.org) ·
+[Krohnkite](https://github.com/anametologin/krohnkite) ·
+[Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)

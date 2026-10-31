@@ -1,26 +1,17 @@
 [kcminputrc][Mouse]
-cursorTheme=Layan-white-cursors
+cursorTheme=Bibata-Modern-Ice
 
 [kdeglobals][General]
-ColorScheme=Layan
+ColorScheme=MaterialYouDark
 
 [kdeglobals][Icons]
-Theme=Papirus
+Theme=Papirus-Dark
 
 [kdeglobals][KDE]
-widgetStyle=kvantum-dark
-
-[kwinrc][DesktopSwitcher]
-LayoutName=org.kde.breeze.desktop
+widgetStyle=Breeze
 
 [kwinrc][WindowSwitcher]
 LayoutName=org.kde.breeze.desktop
 
-[kwinrc][org.kde.kdecoration2]
-ButtonsOnLeft=
-ButtonsOnRight=IAX
-library=org.kde.kwin.aurorae
-theme=__aurorae__svg__Layan
-
 [plasmarc][Theme]
-name=Layan
+name=default

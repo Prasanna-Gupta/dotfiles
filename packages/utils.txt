@@ -1,0 +1,18 @@
+# Prasanna OS — everyday CLI utilities (used by the zshrc aliases)
+fzf            # fuzzy finder: Ctrl+T files, Alt+C dirs
+atuin          # searchable shell history: Ctrl+R
+zoxide         # `z proj` jumps to ~/Projects/...
+eza            # ls with icons + git status
+bat            # cat with syntax highlight
+fd             # fast find
+ripgrep        # fast grep
+git-delta      # pretty git diffs (already your pager)
+lazygit
+btop
+fastfetch
+tealdeer       # `tldr tar`
+yazi           # terminal file manager
+duf
+dust
+plocate
+pacman-contrib # paccache (weekly cache cleanup timer)
