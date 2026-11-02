@@ -8,6 +8,10 @@ source "$DOTFILES/lib/common.sh"
 T="$DOTFILES/modules/theming"
 STATE="${XDG_STATE_HOME:-$HOME/.local/state}/prasanna"
 SDDM_THEME=/usr/share/sddm/themes/silent
+# Files matugen writes must be yours (v1 created some via sudo)
+for f in "$HOME/.config/kitty/theme.conf" "$STATE/colors.json"; do
+    [[ -e "$f" && ! -O "$f" ]] && run sudo chown "$USER:" "$f"
+done
 run mkdir -p "$STATE/logs" "$HOME/.config/matugen" "$HOME/.local/bin" "$HOME/.config/kitty"
 
 step "Theming engine"
@@ -28,7 +32,7 @@ sddm_enabled=false
 if [[ -d "$SDDM_THEME" ]]; then
     sddm_enabled=true
     run sudo mkdir -p /etc/sddm-prasanna
-    run sudo chown "$USER:" /etc/sddm-prasanna
+    run sudo chown -R "$USER:" /etc/sddm-prasanna
     [[ -f /etc/sddm-prasanna/prasanna.conf ]] || run cp "$T/templates/sddm.conf.tmpl" /etc/sddm-prasanna/prasanna.conf
     if [[ ! -L "$SDDM_THEME/configs/prasanna.conf" ]]; then
         run sudo ln -sf /etc/sddm-prasanna/prasanna.conf "$SDDM_THEME/configs/prasanna.conf"

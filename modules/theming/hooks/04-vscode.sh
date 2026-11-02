@@ -4,6 +4,8 @@ set -euo pipefail
 : "${STATE_DIR:=${XDG_STATE_HOME:-$HOME/.local/state}/prasanna}"
 : "${PRASANNA_THEMING:=$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
 
+[[ -f "$STATE_DIR/colors.json" ]] || { echo "colors.json missing — hook 03 (matugen) failed, fix that first"; exit 1; }
+
 found=false
 for s in "$HOME/.config/Code/User/settings.json" "$HOME/.config/Code - OSS/User/settings.json" "$HOME/.config/VSCodium/User/settings.json"; do
     [[ -f "$s" ]] || continue

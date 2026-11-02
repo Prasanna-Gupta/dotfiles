@@ -8,6 +8,7 @@
 #   ./install.sh --yes all        no package prompts (yay --noconfirm)
 #
 # Opt-in modules (never part of `all`):
+#   look      matching theme stack (Breeze/Papirus/borderless) — changes your theme choices
 #   panel     replace your panels with the minimal floating panel (backs up first)
 #   apps      install your app list (packages/apps.txt)
 #   cleanup   remove HyDE/old-theme leftovers (packages/remove.txt), asks first
@@ -25,7 +26,7 @@ for a in "$@"; do
     case "$a" in
         --dry-run) export DRY_RUN=true ;;
         --yes|-y)  export ASSUME_YES=true ;;
-        -h|--help) sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        -h|--help) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
         all)       mods+=("${ALL[@]}") ;;
         *)         mods+=("$a") ;;
     esac
@@ -57,6 +58,7 @@ for m in "${mods[@]}"; do
         asus)      bash "$DOTFILES/modules/asus/setup.sh" ;;
         tiling)    bash "$DOTFILES/modules/tiling/setup.sh" ;;
         snapshots) bash "$DOTFILES/modules/snapshots/setup.sh" ;;
+        look)      bash "$DOTFILES/modules/kde/look.sh" ;;
         panel)     bash "$DOTFILES/modules/kde/panel.sh" ;;
         apps)      step "Apps"; pkg_install "$DOTFILES/packages/apps.txt" ;;
         cleanup)

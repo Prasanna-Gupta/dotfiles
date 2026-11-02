@@ -67,7 +67,7 @@ cd ~/dotfiles
 Then log out and pick **Plasma (Wayland)** at the login screen.
 
 Every module is independent and re-runnable: `./install.sh kde`, `./install.sh asus`, …
-Opt-in extras (not in `all`): `panel` (minimal floating panel), `apps` (your app list), `cleanup` (remove leftovers).
+Opt-in extras (not in `all`): `look` (the matching theme stack below; `all` never changes your app style, Plasma style, decorations, icons, cursor or splash), `panel` (minimal floating panel), `apps` (your app list), `cleanup` (remove leftovers).
 
 **Coming from v1?** Read [docs/MIGRATION.md](docs/MIGRATION.md) first. One command keeps your desktop intact during the switch.
 

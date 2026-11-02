@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# KDE Plasma look + behaviour, applied with kwriteconfig6.
+# KDE Plasma behaviour + performance, applied with kwriteconfig6.
+# Does NOT touch: application style, Plasma style, window decoration, icons,
+# cursor, splash screen, GTK theme. Those are yours; the optional, matching
+# stack lives in look.sh (`./install.sh look`).
 #
 # Why not symlink kdeglobals/kwinrc like v1? KDE rewrites those files all the
 # time (Material You writes colours into kdeglobals, kwin stores tiling UUIDs),
@@ -13,18 +16,10 @@ have kwriteconfig6 || { err "kwriteconfig6 not found — is this Plasma 6?"; exi
 
 step "KDE Plasma"
 
-# ── Look-and-feel package (custom logout dialog) ─────────────────────────────
-symlink "$DOTFILES/modules/kde/look-and-feel/com.prasanna.desktop" \
-    "$HOME/.local/share/plasma/look-and-feel/com.prasanna.desktop"
-# Applies only its defaults file — does NOT reset your panels/layout
-have plasma-apply-lookandfeel && run plasma-apply-lookandfeel --apply com.prasanna.desktop || true
-
-# ── Unified stack: everything reads the MaterialYouDark colour scheme ─────────
-kwrite kdeglobals KDE widgetStyle Breeze
-kwrite kdeglobals Icons Theme Papirus-Dark
+# ── Defaults that don't change your theme choices ────────────────────────────
 kwrite kdeglobals General TerminalApplication kitty
 kwrite kdeglobals General TerminalService kitty.desktop
-# Snappier animations (one notch faster than default) — feels more "premium"
+# Snappier animations (one notch faster than default)
 kwrite kdeglobals KDE AnimationDurationFactor 0.7071067811865475
 # v1 forced Qt Quick software rendering: laggy panel, high CPU. Remove it.
 kdelete kdeglobals QtQuickRendererSettings SceneGraphBackend
@@ -36,31 +31,6 @@ kwrite kdeglobals General toolBarFont "Inter,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 kwrite kdeglobals General smallestReadableFont "Inter,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 kwrite kdeglobals General fixed "JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 kwrite kdeglobals WM activeFont "Inter,10,-1,5,600,0,0,0,0,0,0,0,0,0,0,1,SemiBold"
-
-# Plasma style "default" = Breeze, which follows the colour scheme (so the
-# panel picks up the wallpaper accent). Cursor stays Bibata.
-have plasma-apply-desktoptheme && run plasma-apply-desktoptheme default || true
-have plasma-apply-cursortheme && run plasma-apply-cursortheme Bibata-Modern-Ice || true
-
-# GTK apps: Breeze GTK reads KDE colours through kde-gtk-config
-kwrite gtk-3.0/settings.ini Settings gtk-theme-name Breeze
-kwrite gtk-4.0/settings.ini Settings gtk-theme-name Breeze
-have gsettings && run gsettings set org.gnome.desktop.interface gtk-theme Breeze || true
-have gsettings && run gsettings set org.gnome.desktop.interface icon-theme Papirus-Dark || true
-have gsettings && run gsettings set org.gnome.desktop.interface color-scheme prefer-dark || true
-
-# ── Window decorations: borderless, three buttons on the right ───────────────
-deco_lib=org.kde.breeze; deco_theme=Breeze
-if find /usr/lib/qt6/plugins -iname '*klassy*' 2>/dev/null | grep -q .; then
-    deco_lib=org.kde.klassy; deco_theme=Klassy
-fi
-kwrite kwinrc org.kde.kdecoration2 library "$deco_lib"
-kwrite kwinrc org.kde.kdecoration2 theme "$deco_theme"
-kwrite kwinrc org.kde.kdecoration2 BorderSize None
-kwrite kwinrc org.kde.kdecoration2 BorderSizeAuto false
-kwrite kwinrc org.kde.kdecoration2 ButtonsOnLeft ""
-kwrite kwinrc org.kde.kdecoration2 ButtonsOnRight IAX
-log "Window decoration: $deco_theme"
 
 # ── Effects: one blur, subtle motion, nothing gimmicky ───────────────────────
 # Stock Blur only. Better Blur DX + stock Blur both on = conflict (and the AUR
@@ -78,6 +48,10 @@ kwrite kwinrc Plugins glideEnabled false
 kwrite kwinrc Plugins scaleEnabled true
 kwrite kwinrc Plugins hidecursorEnabled true
 kwrite kwinrc Effect-hidecursor InactivityDuration 3
+
+# Install (not apply) the look-and-feel package so its logout dialog is available
+symlink "$DOTFILES/modules/kde/look-and-feel/com.prasanna.desktop" \
+    "$HOME/.local/share/plasma/look-and-feel/com.prasanna.desktop"
 
 # ── Behaviour ────────────────────────────────────────────────────────────────
 kwrite kwinrc Windows BorderSnapZone 12
