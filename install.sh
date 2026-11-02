@@ -20,7 +20,7 @@ export DOTFILES
 # shellcheck source=lib/common.sh
 source "$DOTFILES/lib/common.sh"
 
-ALL=(packages theme kde shell wayland asus tiling snapshots)
+ALL=(packages theme kde shell wayland asus snapshots)
 mods=()
 for a in "$@"; do
     case "$a" in
